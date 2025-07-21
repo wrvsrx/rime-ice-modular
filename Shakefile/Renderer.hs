@@ -14,15 +14,18 @@ import Shakefile.Components (
   RimeTransformation (..),
  )
 
+srcDir :: FilePath
+srcDir = "externals" </> "rime-ice"
+
 buildDir :: FilePath
 buildDir = "build"
 
 renderRimeTransformationToAction :: RimeTransformation -> Action ()
 renderRimeTransformationToAction = \case
-  RimeTransformationIdentity path -> copyFileChanged path (buildDir </> path)
-  RimeTransformationRename path path' -> copyFileChanged path (buildDir </> path')
+  RimeTransformationIdentity path -> copyFileChanged (srcDir </> path) (buildDir </> path)
+  RimeTransformationRename path path' -> copyFileChanged (srcDir </> path) (buildDir </> path')
   RimeTransformationApply path f -> do
-    content <- readFile' path
+    content <- readFile' (srcDir </> path)
     let
       (path', content') = f (path, content)
     writeFile' (buildDir </> path') content'
