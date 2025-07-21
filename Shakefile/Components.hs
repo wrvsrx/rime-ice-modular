@@ -123,7 +123,7 @@ rimeIceDoubleDefaultPatch =
     ( "double-default-patch"
     ,
       [ RimeTransformationProduce
-          "rime_ice_double_default_patch.yaml"
+          "rime_ice_double_pinyin_default_patch.yaml"
           ((BU.toString . Y.encode . A.object) ["recognizer/patterns/uppercase" .= A.Null])
       ]
     )
