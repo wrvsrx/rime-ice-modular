@@ -8,6 +8,7 @@
 module Shakefile.Components (
   RimeTransformation (..),
   RimeComponent,
+  RimeComponent' (..),
   allComponent,
 ) where
 
@@ -34,7 +35,15 @@ data RimeTransformation
   | RimeTransformationRename FilePath FilePath
   | RimeTransformationApply FilePath FilePath (String -> String)
   | RimeTransformationProduce FilePath String
+
 type RimeComponent = Tr.Tree (String, [RimeTransformation])
+
+data RimeComponent'
+  = RimeComponent'
+  { name :: String
+  , transformation_list :: [RimeTransformation]
+  , dependencies :: [String]
+  }
 
 opencc :: RimeComponent
 opencc =

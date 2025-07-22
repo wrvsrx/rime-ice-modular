@@ -4,11 +4,22 @@
 
 module Shakefile (main) where
 
+import Data.Map qualified as M
 import Development.Shake
-import Shakefile.Components (allComponent)
-import Shakefile.Renderer (renderRimeComponentClosure)
+import Shakefile.Components (RimeComponent' (..), allComponent)
+import Shakefile.Renderer (
+  rimeComponent'ToRule,
+  rimeComponentToMap,
+ )
 
 main :: IO ()
 main = shakeArgs shakeOptions $ do
   want ["all"]
-  renderRimeComponentClosure allComponent
+  let
+    components' =
+      map
+        ( \(name, (transformation_list, dependencies)) ->
+            RimeComponent'{name = name, transformation_list = transformation_list, dependencies = dependencies}
+        )
+        (M.toList (rimeComponentToMap allComponent))
+  mapM_ rimeComponent'ToRule components'

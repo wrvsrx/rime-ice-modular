@@ -1,8 +1,10 @@
 {-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE OverloadedRecordDot #-}
 {-# OPTIONS_GHC -Werror=all #-}
 
 module Shakefile.Renderer (
-  renderRimeComponentClosure,
+  rimeComponent'ToRule,
+  rimeComponentToMap,
 ) where
 
 import Data.Map qualified as M
@@ -11,6 +13,7 @@ import Development.Shake
 import Development.Shake.FilePath
 import Shakefile.Components (
   RimeComponent,
+  RimeComponent' (..),
   RimeTransformation (..),
  )
 
@@ -20,8 +23,8 @@ srcDir = "externals" </> "rime-ice"
 buildDir :: FilePath
 buildDir = "build"
 
-renderRimeTransformationToAction :: RimeTransformation -> Action ()
-renderRimeTransformationToAction = \case
+rimeTransformationToAction :: RimeTransformation -> Action ()
+rimeTransformationToAction = \case
   RimeTransformationIdentity path -> copyFileChanged (srcDir </> path) (buildDir </> path)
   RimeTransformationRename path path' -> copyFileChanged (srcDir </> path) (buildDir </> path')
   RimeTransformationApply path path' f -> do
@@ -29,16 +32,15 @@ renderRimeTransformationToAction = \case
     writeFile' (buildDir </> path') (f content)
   RimeTransformationProduce path content -> writeFile' (buildDir </> path) content
 
-renderRimeComponentToMap :: RimeComponent -> M.Map String ([RimeTransformation], [String])
-renderRimeComponentToMap (Tr.Node (name, transformations) childern) = M.insert name (transformations, map (fst . Tr.rootLabel) childern) (M.unions (map renderRimeComponentToMap childern))
+rimeComponentToMap :: RimeComponent -> M.Map String ([RimeTransformation], [String])
+rimeComponentToMap (Tr.Node (name, transformations) childern) =
+  M.insert
+    name
+    (transformations, map (fst . Tr.rootLabel) childern)
+    (M.unions (map rimeComponentToMap childern))
 
-renderRimeComponentClosure :: RimeComponent -> Rules ()
-renderRimeComponentClosure component = do
-  let
-    components = M.toList (renderRimeComponentToMap component)
-  mapM_
-    ( \(name, (transformations, dependencies)) -> phony name $ do
-        need dependencies
-        mapM_ renderRimeTransformationToAction transformations
-    )
-    components
+rimeComponent'ToRule :: RimeComponent' -> Rules ()
+rimeComponent'ToRule component' =
+  phony component'.name $ do
+    need component'.dependencies
+    mapM_ rimeTransformationToAction component'.transformation_list
