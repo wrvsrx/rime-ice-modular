@@ -211,10 +211,10 @@ getDoubleMeltEngSchema doublePinyinSchema =
     suffix' = getDoubleSuffix' doublePinyinSchema
    in
     Tr.Node
-      ( "melg_eng_double" <> suffix
+      ( "melt_eng_double_pinyin" <> suffix
       ,
         [ RimeTransformationProduce
-            ("melg_eng_double" <> suffix <> ".schema.yaml")
+            ("melt_eng_double_pinyin" <> suffix <> ".schema.yaml")
             ( printf
                 [r|
 schema:
