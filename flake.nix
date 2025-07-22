@@ -18,7 +18,20 @@
         perSystem =
           { pkgs, ... }:
           rec {
-            packages.default = pkgs.callPackage ./default.nix { };
+            packages =
+              let
+                default = pkgs.callPackage ./default.nix { };
+                components' = import ./components.nix {
+                  rime-ice-modular = default;
+                  stdenv = pkgs.stdenv;
+                };
+              in
+              {
+                inherit default;
+                inherit (components')
+                  rime-ice-pinyin
+                  ;
+              };
             devShells.default = pkgs.mkShell { inputsFrom = [ packages.default ]; };
             formatter = pkgs.nixfmt-rfc-style;
           };
