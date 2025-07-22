@@ -4,6 +4,8 @@
 
 module Shakefile (main) where
 
+import Data.Aeson qualified as A
+import Data.ByteString.Lazy.UTF8 qualified as BU
 import Data.Map qualified as M
 import Development.Shake
 import Shakefile.Components (RimeComponent' (..), allComponent)
@@ -23,3 +25,5 @@ main = shakeArgs shakeOptions $ do
         )
         (M.toList (rimeComponentToMap allComponent))
   mapM_ rimeComponent'ToRule components'
+  phony "json" $
+    writeFileChanged "components.json" (BU.toString $ A.encode components')

@@ -6,6 +6,8 @@
 module Shakefile.Renderer (
   rimeComponent'ToRule,
   rimeComponentToMap,
+  buildDir,
+  srcDir,
 ) where
 
 import Data.Map qualified as M

@@ -13,6 +13,7 @@ stdenvNoCC.mkDerivation {
         shake
         raw-strings-qq
         extra
+        utf8-string
       ]
     ))
   ];
