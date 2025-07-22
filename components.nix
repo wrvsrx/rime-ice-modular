@@ -7,7 +7,7 @@ let
       value = stdenv.mkDerivation {
         name = "rime-ice-" + x;
         src = rime-ice-modular;
-        passthru.rimeDependencies = map (y: components'.${y}) components.${x}.dependencies;
+        passthru.rimeDependencies = map (y: components'.${"rime-ice-" + y}) components.${x}.dependencies;
         buildPhase = "true";
         installPhase = ''
           ${builtins.concatStringsSep "\n" (
