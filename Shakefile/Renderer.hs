@@ -24,11 +24,9 @@ renderRimeTransformationToAction :: RimeTransformation -> Action ()
 renderRimeTransformationToAction = \case
   RimeTransformationIdentity path -> copyFileChanged (srcDir </> path) (buildDir </> path)
   RimeTransformationRename path path' -> copyFileChanged (srcDir </> path) (buildDir </> path')
-  RimeTransformationApply path f -> do
+  RimeTransformationApply path path' f -> do
     content <- readFile' (srcDir </> path)
-    let
-      (path', content') = f (path, content)
-    writeFile' (buildDir </> path') content'
+    writeFile' (buildDir </> path') (f content)
   RimeTransformationProduce path content -> writeFile' (buildDir </> path) content
 
 renderRimeComponentToMap :: RimeComponent -> M.Map String ([RimeTransformation], [String])
