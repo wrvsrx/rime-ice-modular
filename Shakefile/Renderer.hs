@@ -1,22 +1,24 @@
 {-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Werror=all #-}
 
 module Shakefile.Renderer (
-  rimeComponent'ToRule,
+  rimeComponentToRule,
   rimeComponentToMap,
+  rimeComponentToJSON,
   buildDir,
   srcDir,
 ) where
 
+import Data.Aeson ((.=))
+import Data.Aeson qualified as A
 import Data.Map qualified as M
+import Data.Maybe (mapMaybe)
 import Data.Tree qualified as Tr
 import Development.Shake
 import Development.Shake.FilePath
 import Shakefile.Components (
   RimeComponent,
-  RimeComponent' (..),
   RimeTransformation (..),
  )
 
@@ -42,8 +44,36 @@ rimeComponentToMap (Tr.Node (name, transformations) childern) =
     (transformations, map (fst . Tr.rootLabel) childern)
     (M.unions (map rimeComponentToMap childern))
 
-rimeComponent'ToRule :: RimeComponent' -> Rules ()
-rimeComponent'ToRule component' =
-  phony component'.name $ do
-    need component'.dependencies
-    mapM_ rimeTransformationToAction component'.transformation_list
+rimeComponentToRule :: String -> [RimeTransformation] -> [String] -> Rules ()
+rimeComponentToRule name transformation_list dependencies =
+  phony name $ do
+    need dependencies
+    mapM_ rimeTransformationToAction transformation_list
+
+rimeComponentToJSON :: [RimeTransformation] -> [String] -> A.Value
+rimeComponentToJSON transformation_list dependencies =
+  let
+    inputs =
+      mapMaybe
+        ( \case
+            RimeTransformationIdentity path -> Just path
+            RimeTransformationApply path _ _ -> Just path
+            RimeTransformationProduce _ _ -> Nothing
+            RimeTransformationRename path _ -> Just path
+        )
+        transformation_list
+    outputs =
+      map
+        ( \case
+            RimeTransformationIdentity path -> Just path
+            RimeTransformationApply _ path' _ -> Just path'
+            RimeTransformationProduce path' _ -> Just path'
+            RimeTransformationRename _ path' -> Just path'
+        )
+        transformation_list
+   in
+    A.object
+      [ "inputs" .= inputs
+      , "outputs" .= outputs
+      , "dependencies" .= dependencies
+      ]
