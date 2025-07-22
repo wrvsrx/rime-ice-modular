@@ -14,7 +14,6 @@ module Shakefile.Components (
 import Data.Aeson ((.=))
 import Data.Aeson qualified as A
 import Data.ByteString.UTF8 qualified as BU
-import Data.Function ((&))
 import Data.List.Extra (replace)
 import Data.Tree qualified as Tr
 import Data.Yaml qualified as Y
