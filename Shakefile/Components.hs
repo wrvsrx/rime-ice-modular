@@ -16,6 +16,7 @@ import Data.Aeson ((.=))
 import Data.Aeson qualified as A
 import Data.ByteString.UTF8 qualified as BU
 import Data.List.Extra (replace)
+import Data.Maybe (mapMaybe)
 import Data.Tree qualified as Tr
 import Data.Yaml qualified as Y
 import Text.Printf (printf)
@@ -44,6 +45,35 @@ data RimeComponent'
   , transformation_list :: [RimeTransformation]
   , dependencies :: [String]
   }
+
+instance A.ToJSON RimeComponent' where
+  toJSON component' =
+    let
+      inputs =
+        mapMaybe
+          ( \case
+              RimeTransformationIdentity path -> Just path
+              RimeTransformationApply path _ _ -> Just path
+              RimeTransformationProduce _ _ -> Nothing
+              RimeTransformationRename path _ -> Just path
+          )
+          component'.transformation_list
+      outputs =
+        map
+          ( \case
+              RimeTransformationIdentity path -> Just path
+              RimeTransformationApply _ path' _ -> Just path'
+              RimeTransformationProduce path' _ -> Just path'
+              RimeTransformationRename _ path' -> Just path'
+          )
+          component'.transformation_list
+     in
+      A.object
+        [ "name" .= component'.name
+        , "inputs" .= inputs
+        , "outputs" .= outputs
+        , "dependencies" .= component'.dependencies
+        ]
 
 opencc :: RimeComponent
 opencc =
