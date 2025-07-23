@@ -143,6 +143,8 @@ rimeIceDefaultPatch =
           ( (BU.toString . Y.encode . A.object)
               [ "switcher/save_options/+" .= (["ascii_mode", "emoji", "search_single_char", "traditionalization"] :: [String])
               , "punctuator" .= A.object ["__include" .= ("rime_ice_suggestion:/punctuator" :: String)]
+              , "key_binder/select_first_character" .= A.object ["__include" .= ("rime_ice_suggestion:/key_binder/select_first_character" :: String)]
+              , "key_binder/select_last_character" .= A.object ["__include" .= ("rime_ice_suggestion:/key_binder/select_last_character" :: String)]
               ]
           )
       ]
