@@ -124,7 +124,11 @@ rimeIceDoubleDefaultPatch =
     ,
       [ RimeTransformationProduce
           "rime_ice_double_pinyin_default_patch.yaml"
-          ((BU.toString . Y.encode . A.object) ["recognizer/patterns/uppercase" .= A.Null])
+          ( (BU.toString . Y.encode . A.object)
+              [ "__merge" .= A.object ["recognizer/patterns/uppercase" .= A.Null]
+              , "__include" .= ("rime_ice_default_patch:/" :: String)
+              ]
+          )
       ]
     )
     []
