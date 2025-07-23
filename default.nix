@@ -1,10 +1,11 @@
 {
   stdenvNoCC,
   haskellPackages,
+  source,
 }:
 stdenvNoCC.mkDerivation {
-  name = "rime-ice-modular";
-  src = ./.;
+  inherit (source) pname src;
+  version = "0-unstable-" + source.date;
   env.LANG = "C.UTF-8";
   nativeBuildInputs = [
     (haskellPackages.ghcWithPackages (

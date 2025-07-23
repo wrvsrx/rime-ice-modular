@@ -7,6 +7,11 @@
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
+    nur-wrvsrx = {
+      url = "github:wrvsrx/nur-packages";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+    };
   };
 
   outputs =
@@ -16,22 +21,31 @@
       {
         systems = [ "x86_64-linux" ];
         perSystem =
-          { pkgs, ... }:
+          { pkgs, system, ... }:
           rec {
+            _module.args.pkgs = import inputs.nixpkgs {
+              inherit system;
+              overlays = [ inputs.nur-wrvsrx.overlays.default ];
+            };
             packages =
               let
-                default = pkgs.callPackage ./default.nix { };
+                rime-ice-modular-src = pkgs.callPackage ./. {
+                  source = {
+                    pname = "rime-ice-modular";
+                    src = ./.;
+                    date = "2025-07-23";
+                  };
+                };
                 components' = import ./components.nix {
-                  rime-ice-modular = default;
-                  stdenv = pkgs.stdenv;
+                  inherit rime-ice-modular-src;
+                  inherit (pkgs.rimePackages) callPackage;
                 };
               in
               {
-                inherit default;
-                inherit (components')
-                  rime-ice-pinyin
-                  ;
-              };
+                default = rime-ice-modular-src;
+                inherit rime-ice-modular-src;
+              }
+              // components';
             devShells.default = pkgs.mkShell { inputsFrom = [ packages.default ]; };
             formatter = pkgs.nixfmt-rfc-style;
           };

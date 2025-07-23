@@ -269,7 +269,7 @@ getDoublePinyinSchema doublePinyinSchema =
     suffix' = getDoubleSuffix' doublePinyinSchema
    in
     Tr.Node
-      ( "double" <> suffix
+      ( "double_pinyin" <> suffix
       ,
         [ RimeTransformationApply
             ("double_pinyin" <> suffix <> ".schema.yaml")
