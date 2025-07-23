@@ -4,8 +4,7 @@
   source,
 }:
 stdenvNoCC.mkDerivation {
-  inherit (source) pname src;
-  version = "0-unstable-" + source.date;
+  inherit (source) pname src version;
   env.LANG = "C.UTF-8";
   nativeBuildInputs = [
     (haskellPackages.ghcWithPackages (
