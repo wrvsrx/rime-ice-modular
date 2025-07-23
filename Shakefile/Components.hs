@@ -279,18 +279,18 @@ getDoublePinyinSchema doublePinyinSchema =
             ("double_pinyin" <> suffix <> ".schema.yaml")
             ("rime_ice_double_pinyin" <> suffix <> ".schema.yaml")
             ( -- Since we want to keep comments in yaml file, we can't deserialize original file then serialize it back. So we can only use `replace ` to modify the content.
-              replace ("double_pinyin" <> suffix) ("rime_ice_double_pinyin" <> suffix)
-                . replace "- melt_eng" ("- melt_eng_double_pinyin" <> suffix)
-                . replace
-                  (printf "melt_eng:\n  dictionary: melt_eng")
-                  (printf "melt_eng:\n  dictionary: melt_eng\n  prism: %s" ("melt_eng_double_pinyin" <> suffix))
-                . replace "- radical_pinyin" ("- radical_pinyin_double_pinyin" <> suffix)
+              replace
+                "@radical_pinyin"
+                ("@radical_pinyin_double_pinyin" <> suffix)
                 . replace
                   (printf "radical_pinyin:\n  dictionary: radical_pinyin")
                   (printf "radical_pinyin:\n  dictionary: radical_pinyin\n  prism: %s" ("radical_pinyin_double_pinyin" <> suffix))
+                . replace "- radical_pinyin" ("- radical_pinyin_double_pinyin" <> suffix)
                 . replace
-                  "@radical_pinyin"
-                  ("@radical_pinyin_double_pinyin" <> suffix)
+                  (printf "melt_eng:\n  dictionary: melt_eng")
+                  (printf "melt_eng:\n  dictionary: melt_eng\n  prism: %s" ("melt_eng_double_pinyin" <> suffix))
+                . replace "- melt_eng" ("- melt_eng_double_pinyin" <> suffix)
+                . replace ("double_pinyin" <> suffix) ("rime_ice_double_pinyin" <> suffix)
             )
         , RimeTransformationProduce ("custom_phrase_double_pinyin" <> suffix <> ".txt") ""
         , RimeTransformationIdentity ("en_dicts/cn_en" <> suffix' <> ".txt")
