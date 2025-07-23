@@ -6,6 +6,7 @@ module Shakefile (main) where
 
 import Data.Aeson ((.=))
 import Data.Aeson qualified as A
+import Data.Aeson.Encode.Pretty qualified as A
 import Data.Aeson.Key qualified as A
 import Data.ByteString.Lazy.UTF8 qualified as BU
 import Data.Map qualified as M
@@ -27,7 +28,7 @@ main = shakeArgs shakeOptions $ do
     writeFileChanged
       "components.json"
       ( BU.toString $
-          A.encode $
+          A.encodePretty $
             A.object $
               map
                 ( \(name, (transformation_list, dependencies)) ->

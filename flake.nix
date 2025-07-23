@@ -29,11 +29,11 @@
             };
             packages =
               let
-                rime-ice-modular-src = pkgs.callPackage ./. {
+                rime-ice-modular-src = pkgs.callPackage ./rime-ice-modular-src.nix {
                   source = {
                     pname = "rime-ice-modular";
                     src = ./.;
-                    version = "2025.04.26-02";
+                    version = "2025.04.26-03";
                   };
                 };
                 components' = import ./components.nix {
