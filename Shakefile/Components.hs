@@ -284,7 +284,7 @@ getDoublePinyinSchema doublePinyinSchema =
                 ("@radical_pinyin_double_pinyin" <> suffix)
                 . replace
                   (printf "radical_lookup:\n  tag: radical_lookup\n  dictionary: radical_pinyin")
-                  (printf "radical_pinyin:\n  tag: radical_lookup\n  dictionary: radical_pinyin\n  prism: %s" ("radical_pinyin_double_pinyin" <> suffix))
+                  (printf "radical_lookup:\n  tag: radical_lookup\n  dictionary: radical_pinyin\n  prism: %s" ("radical_pinyin_double_pinyin" <> suffix))
                 . replace "- radical_pinyin" ("- radical_pinyin_double_pinyin" <> suffix)
                 . replace
                   (printf "melt_eng:\n  dictionary: melt_eng")
