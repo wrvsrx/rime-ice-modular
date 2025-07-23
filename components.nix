@@ -1,6 +1,6 @@
 { rime-ice-modular-src, callPackage }:
 let
-  prefix = "rime-ice-moduar-";
+  prefix = "rime-ice-";
   components = builtins.fromJSON (builtins.readFile ./components.json);
   components' = builtins.listToAttrs (
     map (x: {
