@@ -80,6 +80,7 @@ luas =
       , RimeTransformationIdentity "lua/select_character.lua"
       , RimeTransformationIdentity "lua/t9_preedit.lua"
       , RimeTransformationIdentity "lua/unicode.lua"
+      , RimeTransformationIdentity "lua/uuid.lua"
       , RimeTransformationIdentity "lua/v_filter.lua"
       ]
     )
