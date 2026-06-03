@@ -216,7 +216,6 @@ getDoubleMeltEngSchema :: DoublePinyinSchema -> RimeComponent
 getDoubleMeltEngSchema doublePinyinSchema =
   let
     suffix = getDoubleSuffix doublePinyinSchema
-    suffix' = getDoubleSuffix' doublePinyinSchema
    in
     Tr.Node
       ( "melt_eng_double_pinyin" <> suffix
@@ -230,11 +229,11 @@ schema:
 __include: melt_eng.schema:/
 __patch:
   "speller/algebra":
-    __include: melt_eng.schema:/algebra%s
+    __include: melt_eng.schema:/algebra_double_pinyin%s
   "translator/prism": melt_eng_double_pinyin%s
 |]
                 suffix
-                suffix'
+                suffix
                 suffix
             )
         ]
@@ -245,7 +244,6 @@ getDoubleRadicalPinyinSchema :: DoublePinyinSchema -> RimeComponent
 getDoubleRadicalPinyinSchema doublePinyinSchema =
   let
     suffix = getDoubleSuffix doublePinyinSchema
-    suffix' = getDoubleSuffix' doublePinyinSchema
    in
     Tr.Node
       ( "radical_pinyin_double_pinyin" <> suffix
@@ -259,11 +257,11 @@ schema:
 __include: radical_pinyin.schema:/
 __patch:
   "speller/algebra":
-    __include: radical_pinyin.schema:/algebra%s
+    __include: radical_pinyin.schema:/algebra_double_pinyin%s
   "translator/prism": radical_pinyin_double_pinyin%s
 |]
                 suffix
-                suffix'
+                suffix
                 suffix
             )
         ]
