@@ -73,6 +73,7 @@ luas =
       , RimeTransformationIdentity "lua/is_in_user_dict.lua"
       , RimeTransformationIdentity "lua/long_word_filter.lua"
       , RimeTransformationIdentity "lua/lunar.lua"
+      , RimeTransformationIdentity "lua/lunar.db"
       , RimeTransformationIdentity "lua/number_translator.lua"
       , RimeTransformationIdentity "lua/pin_cand_filter.lua"
       , RimeTransformationIdentity "lua/reduce_english_filter.lua"
