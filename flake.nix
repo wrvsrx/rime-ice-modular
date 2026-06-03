@@ -33,7 +33,7 @@
                   source = {
                     pname = "rime-ice-modular";
                     src = ./.;
-                    version = "2026.06.03-01";
+                    version = "2026.06.03-02";
                   };
                 };
                 components' = import ./components.nix {
