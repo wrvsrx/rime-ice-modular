@@ -57,6 +57,7 @@ luas =
       [ RimeTransformationIdentity "lua/autocap_filter.lua"
       , RimeTransformationIdentity "lua/calc_translator.lua"
       , RimeTransformationIdentity "lua/cn_en_spacer.lua"
+      , RimeTransformationIdentity "lua/convert_ar_num_to_zh.lua"
       , RimeTransformationIdentity "lua/cold_word_drop/drop_words.lua"
       , RimeTransformationIdentity "lua/cold_word_drop/filter.lua"
       , RimeTransformationIdentity "lua/cold_word_drop/hide_words.lua"
